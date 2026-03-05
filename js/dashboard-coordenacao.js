@@ -274,23 +274,33 @@ async function baixarRelatorio(conselhoId) {
   };
 
   // ============================
-  // CABEÇALHO
+  // CABEÇALHO (mais “documento”)
   // ============================
+  const turmaTxt = conselho.turmas
+    ? `${conselho.turmas.nome} - ${conselho.turmas.ano || ""}`.trim()
+    : "Turma";
+
+  const titulo = "PEI Manoel Ignácio da Silva";
+  const subtitulo = `Relatório do Conselho de Classe • ${turmaTxt} • ${conselho.bimestre}º Bimestre`;
+  const dataConselhoTxt = conselho.data_conselho ? formatarDataBR(conselho.data_conselho) : "-";
+  const dataEmissaoTxt = formatarDataBR(new Date().toISOString());
+
+  doc.setFont("helvetica", "bold");
   doc.setFontSize(15);
-  doc.text("PEI Manoel Ignácio da Silva", pageW / 2, 10, { align: "center" });
+  doc.text(titulo, pageW / 2, 10, { align: "center" });
 
   doc.setFontSize(11);
-  doc.text(
-    `Relatório do Conselho de Classe - ${conselho.turmas?.nome || "-"} - ${conselho.bimestre}º Bimestre`,
-    pageW / 2,
-    16.5,
-    { align: "center" }
-  );
+  doc.text(subtitulo, pageW / 2, 16.5, { align: "center" });
 
+  doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
-  const dataConselhoTxt = conselho.data_conselho ? formatarDataBR(conselho.data_conselho) : "-";
   doc.text(`Data do conselho: ${dataConselhoTxt}`, marginL, 23);
-  doc.text(`Emissão: ${formatarDataBR(new Date().toISOString().slice(0, 10))}`, pageW - marginR, 23, { align: "right" });
+  doc.text(`Emissão: ${dataEmissaoTxt}`, pageW - marginR, 23, { align: "right" });
+
+  // Linhas para preenchimento manual (professor/coordenação)
+  doc.setFontSize(10);
+  doc.text("Professor representante: ____________________________________________", marginL, 29);
+  doc.text("Reunião com responsáveis (data): ____/____/______", pageW - marginR, 29, { align: "right" });
 
   // ============================
   // [V1.1] OBSERVAÇÕES GERAIS (com borda)
