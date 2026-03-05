@@ -305,7 +305,7 @@ async function baixarRelatorio(conselhoId) {
   // ============================
   // [V1.1] OBSERVAÇÕES GERAIS (com borda)
   // ============================
-  const obsLabelY = 30;
+  const obsLabelY = 35;
   doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
   doc.text("Observações gerais da turma:", marginL, obsLabelY);
