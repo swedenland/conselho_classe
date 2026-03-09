@@ -210,20 +210,28 @@
 	  </div>
 	  
 	  <!--Filtro para ver os vinculos já realizados-->
-	  <div class="mb-3">
-		  <label>Filtrar por Turma</label>
-		  <select id="filtro_turma_vinculo" 
-				  class="form-select"
-				  onchange="loadVinculosAcademicos()">
-			<option value="">Todas as turmas</option>
-		  </select>
-		  <input
-			  type="text"
-			  id="filtro_professor_vinculo"
-			  class="form-control mb-2"
-			  placeholder="Buscar professor pelo nome"
-			  oninput="loadVinculosAcademicos()"
-			/>
+	  <div class="row g-2 mb-3">
+		  <div class="col-md-4">
+		    <label for="filtro_turma_vinculo" class="form-label">Filtrar por turma</label>
+		    <select id="filtro_turma_vinculo" class="form-select" onchange="loadVinculosAcademicos()">
+		      <option value="">Todas as turmas</option>
+		    </select>
+		  </div>
+		
+		  <div class="col-md-8 position-relative">
+		    <label for="filtro_professor_vinculo" class="form-label">Buscar professor</label>
+		    <input
+		      type="text"
+		      id="filtro_professor_vinculo"
+		      class="form-control"
+		      placeholder="Digite o nome do professor"
+		      oninput="filtrarSugestoesProfessor()"
+		      autocomplete="off"
+		    />
+		
+		    <div id="lista_sugestoes_professor" class="list-group position-absolute w-100 shadow-sm" style="z-index: 1000;"></div>
+		    <div id="msg_professor_nao_encontrado" class="form-text text-danger d-none">Não encontrado</div>
+		  </div>
 		</div>
 
 	  <div class="card p-4 mb-4">
