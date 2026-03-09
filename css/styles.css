@@ -43,3 +43,19 @@ body.app-body{
 .app-navbar .navbar-brand { padding-top: .2rem; padding-bottom: .2rem; }
 .app-navbar .nav-link { padding-top: .65rem; padding-bottom: .65rem; }
 .app-navbar .navbar-text { margin: 0; }
+
+<style>
+  #lista_sugestoes_professor {
+    max-height: 220px;
+    overflow-y: auto;
+    background: #fff;
+  }
+
+  #lista_sugestoes_professor .list-group-item {
+    cursor: pointer;
+  }
+
+  #lista_sugestoes_professor .list-group-item:hover {
+    background-color: #f8f9fa;
+  }
+</style>
