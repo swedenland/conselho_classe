@@ -402,7 +402,7 @@ async function loadDisciplinasSelect() {
 }
 
 // Carregar professores e turmas para a nova seção
-async function loadSelectsAcademico() {
+/*async function loadSelectsAcademico() {
 
   const { data: professores } = await supabaseClient
     .from("profiles")
@@ -441,6 +441,68 @@ async function loadSelectsAcademico() {
 	discSelect.value = "";
 
   //await loadDisciplinasSelect();
+}*/
+
+async function loadVinculosAcademicos() {
+  const turmaFiltro = document.getElementById("filtro_turma_vinculo")?.value;
+  const professorFiltro = document
+    .getElementById("filtro_professor_vinculo")
+    ?.value
+    ?.trim()
+    .toLowerCase();
+
+  let query = supabaseClient
+    .from("professor_disciplina_turma")
+    .select(`
+      id,
+      turma_id,
+      profiles ( nome ),
+      turmas ( nome, ano ),
+      disciplinas ( nome )
+    `);
+
+  if (turmaFiltro) {
+    query = query.eq("turma_id", turmaFiltro);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  let dadosFiltrados = data || [];
+
+  if (professorFiltro) {
+    dadosFiltrados = dadosFiltrados.filter(v =>
+      v.profiles?.nome?.toLowerCase().includes(professorFiltro)
+    );
+  }
+
+  const container = document.getElementById("vinculoAcademicoList");
+  container.innerHTML = "";
+
+  if (dadosFiltrados.length === 0) {
+    container.innerHTML = "<p>Nenhum vínculo encontrado.</p>";
+    return;
+  }
+
+  dadosFiltrados.forEach(v => {
+    container.innerHTML += `
+      <div class="d-flex justify-content-between align-items-center border p-2 mb-2">
+        <span>
+          ${v.profiles.nome} → 
+          ${v.turmas.nome} - ${v.turmas.ano} → 
+          ${v.disciplinas.nome}
+        </span>
+        <button class="btn btn-sm btn-danger"
+          onclick="excluirVinculoAcademico('${v.id}')">
+          Excluir
+        </button>
+      </div>
+    `;
+  });
 }
 
 //Função para vincular professor/disciplina/turma
@@ -620,4 +682,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadFiltroTurmasVinculo();
   await loadVinculosAcademicos();
 });
+
 
