@@ -6,6 +6,8 @@
   --app-text:#0f172a;
   --app-muted:#64748b;
   --app-border:#e5e7eb;
+  --app-head:#f8fafc;
+  --app-row-hover:#f1f7ff;
 }
 
 body.app-body{
@@ -37,25 +39,66 @@ body.app-body{
   box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
 }
 
-.table thead th{white-space:nowrap;}
+.table thead th{
+  white-space:nowrap;
+  background: var(--app-head);
+  color: var(--app-text);
+  font-size:.92rem;
+  font-weight:700;
+  border-bottom:1px solid var(--app-border);
+  vertical-align:middle;
+}
+
+.table tbody td{
+  vertical-align:middle;
+  border-color:#edf2f7;
+}
+
+.table tbody tr:hover{
+  background: var(--app-row-hover);
+}
+
+.table-responsive{
+  border-radius:14px;
+}
+
+/* Coluna de número da chamada */
+.col-chamada{
+  width:72px;
+  min-width:72px;
+  text-align:center;
+}
+
+.table th.col-chamada{
+  text-align:center;
+}
+
+.table td.col-chamada{
+  text-align:center;
+  font-weight:700;
+  color: var(--app-primary-dark);
+}
+
+/* Caso a tabela use a 1ª coluna para o número sem classe específica */
+.table.table-chamada th:first-child,
+.table.table-chamada td:first-child{
+  width:72px;
+  min-width:72px;
+  text-align:center;
+}
+
+.table.table-chamada td:first-child{
+  font-weight:700;
+  color: var(--app-primary-dark);
+}
+
+/* Nome do aluno com melhor leitura */
+.col-aluno{
+  font-weight:600;
+  color: var(--app-text);
+}
 
 /* Navbar mais enxuta e alinhada */
 .app-navbar .navbar-brand { padding-top: .2rem; padding-bottom: .2rem; }
 .app-navbar .nav-link { padding-top: .65rem; padding-bottom: .65rem; }
 .app-navbar .navbar-text { margin: 0; }
-
-<style>
-  #lista_sugestoes_professor {
-    max-height: 220px;
-    overflow-y: auto;
-    background: #fff;
-  }
-
-  #lista_sugestoes_professor .list-group-item {
-    cursor: pointer;
-  }
-
-  #lista_sugestoes_professor .list-group-item:hover {
-    background-color: #f8f9fa;
-  }
-</style>
