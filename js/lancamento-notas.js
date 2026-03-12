@@ -28,8 +28,9 @@ async function carregarAlunos() {
 
   const { data: alunos, error } = await supabaseClient
     .from("alunos")
-    .select("id, nome")
+    .select("id, nome, numero_chamada")
     .eq("turma_id", turmaId)
+    .order("numero_chamada", { ascending: true, nullsFirst: false })
     .order("nome", { ascending: true });
 
   if (error) {
@@ -47,9 +48,10 @@ async function carregarAlunos() {
   tabela.innerHTML = "";
 
   tabela.innerHTML += `
-    <table class="table table-bordered">
+    <table class="table table-bordered table-chamada">
       <thead>
         <tr>
+          <th class="col-chamada">Nº</th>
           <th>Aluno</th>
           <th>Média</th>
           <th>Faltas</th>
@@ -67,9 +69,10 @@ async function carregarAlunos() {
 
     corpo.innerHTML += `
       <tr>
-        <td>${aluno.nome}</td>
+        <td class="col-chamada">${aluno.numero_chamada ?? ""}</td>
+        <td class="col-aluno">${aluno.nome}</td>
         <td>
-          <input type="number" step="1" min="0" max="10" step="1"
+          <input type="number" min="0" max="10" step="1"
             class="form-control media"
             data-aluno="${aluno.id}"
             value="${notaExistente?.media ?? ''}">
