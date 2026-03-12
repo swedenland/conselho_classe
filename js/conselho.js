@@ -354,6 +354,7 @@ async function montarTabelaAlunos(turmaId, bimestre) {
   corpo.innerHTML = "";
 
   headerTop.innerHTML = `
+    <th class="col-chamada">Nº</th>
     <th>Nome</th>
     <th>Dificuldades</th>
     <th>Atividade em sala</th>
@@ -385,12 +386,13 @@ async function montarTabelaAlunos(turmaId, bimestre) {
 
   cacheDisciplinas = disciplinasUnicas;
 
-  // Alunos
+  // Alunos - ordenação pela chamada
   const { data: alunos, error: errAlunos } = await supabaseClient
     .from("alunos")
     .select("*")
     .eq("turma_id", turmaId)
-    .order("nome");
+    .order("numero_chamada", { ascending: true, nullsFirst: false })
+    .order("nome", { ascending: true });
 
   if (errAlunos) {
     console.log(errAlunos);
@@ -465,7 +467,8 @@ async function montarTabelaAlunos(turmaId, bimestre) {
 
     const linhaHtml = `
       <tr data-aluno-id="${aluno.id}" class="${dadosAluno?.concluido ? "row-concluido" : ""}">
-        <td class="fw-semibold">${aluno.nome}</td>
+        <td class="col-chamada">${aluno.numero_chamada ?? ""}</td>
+        <td class="fw-semibold col-aluno">${aluno.nome}</td>
 
         <!-- Dificuldades -->
         <td style="min-width: 260px;">
@@ -577,7 +580,7 @@ function abrirModalNotas(alunoId) {
   }
 
   const linha = document.querySelector(`tr[data-aluno-id="${alunoId}"]`);
-  const nomeAluno = linha?.querySelector("td")?.innerText || "Aluno";
+  const nomeAluno = linha?.querySelector(".col-aluno")?.innerText || linha?.querySelector("td:nth-child(2)")?.innerText || "Aluno";
   if (tituloEl) tituloEl.innerText = `Notas - ${nomeAluno}`;
 
   const registros = cacheNotasPorAluno[alunoId] || [];
@@ -792,7 +795,9 @@ async function finalizarConselho() {
   const { data: alunos, error: errAlunos } = await supabaseClient
     .from("alunos")
     .select("id,nome")
-    .eq("turma_id", turmaId);
+    .eq("turma_id", turmaId)
+    .order("numero_chamada", { ascending: true, nullsFirst: false })
+    .order("nome", { ascending: true });
 
   if (errAlunos) {
     console.log(errAlunos);
