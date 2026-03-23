@@ -164,7 +164,7 @@ async function processarMapao(event) {
       for (let i = 0; i < json.length; i++) {
         const row = json[i];
         // Verifica a primeira célula da linha (índice 0)
-        if (row[0] && typeof row[0] === "string" && row[0].trim().toUpperCase() === "ALUNO") {
+        if (compararTextos(row[0], "ALUNO")) {
           headerRowIndex = i;
           break;
         }
@@ -184,11 +184,10 @@ async function processarMapao(event) {
 
       const headerRow = json[headerRowIndex];
       let discColIndex = -1;
-      const targetDisc = disciplinaNome.trim().toUpperCase();
 
       for (let j = 0; j < headerRow.length; j++) {
         const cellValue = headerRow[j];
-        if (typeof cellValue === "string" && cellValue.trim().toUpperCase() === targetDisc) {
+        if (compararTextos(cellValue, disciplinaNome)) {
           discColIndex = j;
           break;
         }
@@ -216,7 +215,7 @@ async function processarMapao(event) {
       if (subHeaderRow) {
         for (let c = discColIndex; c <= endColIndex; c++) {
           const val = subHeaderRow[c];
-          if (typeof val === "string" && val.trim().toUpperCase() === "M") {
+          if (compararTextos(val, "M")) {
             mediaColIndex = c;
             break;
           }
@@ -246,9 +245,8 @@ async function processarMapao(event) {
             const nomeHtml = tr.querySelector(".col-aluno")?.innerText;
             const inputMedia = tr.querySelector(".media");
 
-            // Comparação simples (normalizando strings)
-            if (nomeHtml && inputMedia &&
-              nomeHtml.trim().toUpperCase() === nomeExcel.trim().toUpperCase()) {
+            // Comparação aprimorada (ignorando acentos, case e espaços extras)
+            if (nomeHtml && inputMedia && compararTextos(nomeHtml, nomeExcel)) {
 
               const notaExcel = rowData[mediaColIndex];
               // Verifica se é numérico ou string numérica válida
